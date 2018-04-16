@@ -594,7 +594,7 @@ namespace L2_login
 
         Login4 = 0xCE,
 
-        RequestAutoSoulShot = 0xDD, //GD OK
+        RequestAutoSoulShot = 0x0D, //HI5
         RequestCrystallizeEstimate = 0x91,
         RequestCrystallizeCancel = 0x92
 

@@ -155,9 +155,9 @@ namespace L2_login
 			ByteBuffer bbuffer0;
             System.Text.StringBuilder dumpbuilder;
 
-			//Add_Text("Welcome to the game loop",Color.Red);
+            Globals.l2net_home.Add_Text("Welcome to the game loop", Globals.Red, TextType.BOT); 
 
-			try
+            try
 			{
 				while(Globals.gamedata.running && !Globals.gamedata.OOG)
 				{

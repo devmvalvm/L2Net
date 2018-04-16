@@ -224,7 +224,7 @@ namespace L2_login
                             if (buffpacket.Length > 0)
                             {
                                 handle = true;
-                                forward = true;
+                                forward = !Globals.gamedata.OOG;
 
                                 bbuffer0 = new ByteBuffer(buffpacket);
 

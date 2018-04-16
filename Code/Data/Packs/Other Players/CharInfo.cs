@@ -1265,118 +1265,122 @@ namespace L2_login
             // Relation = ch_inf.Relation;
         }
 
-		public void Update(ByteBuffer buff)
-		{
-            uint data = buff.ReadByte();
-				
-			switch(data)
-			{
-				case 0x01://level
-                    Level = buff.ReadUInt32();
-					break;
-				case 0x02://exp
-                    buff.ReadUInt64();
-					break;
-				case 0x03://str
-                    buff.ReadUInt32();
-					break;
-				case 0x04://dex
-                    buff.ReadUInt32();
-					break;
-				case 0x05://con
-                    buff.ReadUInt32();
-					break;
-				case 0x06://int
-                    buff.ReadUInt32();
-					break;
-				case 0x07://wit
-                    buff.ReadUInt32();
-					break;
-				case 0x08://men
-                    buff.ReadUInt32();
-					break;
-				case 0x09://cur hp
-                    Cur_HP = buff.ReadUInt32();
-					break;
-				case 0x0A://max hp
-                    Max_HP = buff.ReadUInt32();
-					break;
-				case 0x0B://cur mp
-                    Cur_MP = buff.ReadUInt32();
-					break;
-				case 0x0C://max mp
-                    Max_MP = buff.ReadUInt32();
-					break;
-				case 0x0D://sp
-                    buff.ReadUInt32();//SP
-					break;
-				case 0x0E://cur load
-                    buff.ReadUInt32();
-					break;
-				case 0x0F://max load
-                    buff.ReadUInt32();
-					break;
-				case 0x10://..
-                    buff.ReadUInt32();
-					break;
-				case 0x11://patk
-                    buff.ReadUInt32();
-					break;
-				case 0x12://atk spd
-                    PatkSpeed = buff.ReadUInt32();
-					break;
-				case 0x13://pdef
-                    buff.ReadUInt32();
-					break;
-				case 0x14://evasion
-                    buff.ReadUInt32();
-					break;
-				case 0x15://acc
-                    buff.ReadUInt32();
-					break;
-				case 0x16://crit
-                    buff.ReadUInt32();
-					break;
-				case 0x17://m atk
-                    buff.ReadUInt32();
-					break;
-				case 0x18://cast spd
-					MatkSpeed = buff.ReadUInt32();
-					break;
-				case 0x19://mdef
-                    buff.ReadUInt32();
-					break;
-				case 0x1A://pvp flag
-					PvPFlag = buff.ReadUInt32();
-					break;
-				case 0x1B://karma
-					Karma = buff.ReadInt32();
-					break;
-				case 0x1C://..
-                    buff.ReadUInt32();
-					break;
-				case 0x1D://..
-                    buff.ReadUInt32();
-					break;
-				case 0x1E://..
-                    buff.ReadUInt32();
-					break;
-				case 0x1F://..
-                    buff.ReadUInt32();
-					break;
-				case 0x20://..
-                    buff.ReadUInt32();
-					break;
-				case 0x21://cur cp
-					Cur_CP = buff.ReadUInt32();
-					break;
-				case 0x22://max cp
-					Max_CP = buff.ReadUInt32();
-					break;
-                default:
-                    buff.ReadUInt32();
-                    break;
-			}
-		}
+        public void Update(ByteBuffer buff)
+        {
+            uint NumberOfUpdates = buff.ReadUInt32();
+            
+            for (int i = 0; i < NumberOfUpdates; i++)
+            {
+                uint data = buff.ReadUInt32();
+                switch (data)
+                {
+                    case 0x01://level
+                        Level = buff.ReadUInt32();
+                        break;
+                    case 0x02://exp
+                        buff.ReadUInt64();
+                        break;
+                    case 0x03://str
+                        buff.ReadUInt32();
+                        break;
+                    case 0x04://dex
+                        buff.ReadUInt32();
+                        break;
+                    case 0x05://con
+                        buff.ReadUInt32();
+                        break;
+                    case 0x06://int
+                        buff.ReadUInt32();
+                        break;
+                    case 0x07://wit
+                        buff.ReadUInt32();
+                        break;
+                    case 0x08://men
+                        buff.ReadUInt32();
+                        break;
+                    case 0x09://cur hp
+                        Cur_HP = buff.ReadUInt32();
+                        break;
+                    case 0x0A://max hp
+                        Max_HP = buff.ReadUInt32();
+                        break;
+                    case 0x0B://cur mp
+                        Cur_MP = buff.ReadUInt32();
+                        break;
+                    case 0x0C://max mp
+                        Max_MP = buff.ReadUInt32();
+                        break;
+                    case 0x0D://sp
+                        buff.ReadUInt32();//SP
+                        break;
+                    case 0x0E://cur load
+                        buff.ReadUInt32();
+                        break;
+                    case 0x0F://max load
+                        buff.ReadUInt32();
+                        break;
+                    case 0x10://..
+                        buff.ReadUInt32();
+                        break;
+                    case 0x11://patk
+                        buff.ReadUInt32();
+                        break;
+                    case 0x12://atk spd
+                        PatkSpeed = buff.ReadUInt32();
+                        break;
+                    case 0x13://pdef
+                        buff.ReadUInt32();
+                        break;
+                    case 0x14://evasion
+                        buff.ReadUInt32();
+                        break;
+                    case 0x15://acc
+                        buff.ReadUInt32();
+                        break;
+                    case 0x16://crit
+                        buff.ReadUInt32();
+                        break;
+                    case 0x17://m atk
+                        buff.ReadUInt32();
+                        break;
+                    case 0x18://cast spd
+                        MatkSpeed = buff.ReadUInt32();
+                        break;
+                    case 0x19://mdef
+                        buff.ReadUInt32();
+                        break;
+                    case 0x1A://pvp flag
+                        PvPFlag = buff.ReadUInt32();
+                        break;
+                    case 0x1B://karma
+                        Karma = buff.ReadInt32();
+                        break;
+                    case 0x1C://..
+                        buff.ReadUInt32();
+                        break;
+                    case 0x1D://..
+                        buff.ReadUInt32();
+                        break;
+                    case 0x1E://..
+                        buff.ReadUInt32();
+                        break;
+                    case 0x1F://..
+                        buff.ReadUInt32();
+                        break;
+                    case 0x20://..
+                        buff.ReadUInt32();
+                        break;
+                    case 0x21://cur cp
+                        Cur_CP = buff.ReadUInt32();
+                        break;
+                    case 0x22://max cp
+                        Max_CP = buff.ReadUInt32();
+                        break;
+                    default:
+                        buff.ReadUInt32();
+                        break;
+                }
+            }
+        }
 	}//end of player info
 }

@@ -128,9 +128,9 @@ namespace L2_login
             earth_defense = buff.ReadInt16();
             unholy_defense = buff.ReadInt16();
             holy_defense = buff.ReadInt16();
-            enchant_effect_0 = buff.ReadUInt16();
-            enchant_effect_1 = buff.ReadUInt16();
-            enchant_effect_2 = buff.ReadUInt16();
+            //enchant_effect_0 = buff.ReadUInt16();
+            //enchant_effect_1 = buff.ReadUInt16();
+            //enchant_effect_2 = buff.ReadUInt16();
 
             buff.ReadUInt32();
 

@@ -130,7 +130,7 @@ namespace L2_login
 #endif
                 System.IO.StreamWriter interout = new System.IO.StreamWriter("interface.txt");
 
-                interout.WriteLine(Globals.LanuageSet.ToString());
+                interout.WriteLine(Globals.LanguageSet.ToString());
 
                 //listView_char_data - report
                 foreach (System.Windows.Forms.ColumnHeader clm in listView_char_data.Columns)
@@ -330,17 +330,17 @@ namespace L2_login
         private void Load_Interface()
         {
             System.IO.StreamReader interin;
-            try
-            {
+            try {
                 interin = new System.IO.StreamReader("config\\interface.txt");
-            } catch (Exception e)
-            {
-                throw new Exception("Failed to open file: " + e.Message);
+            } catch (System.IO.FileNotFoundException e) {
+                throw new Exception(message: e.Message);
+                // Ideally, if the file did not exist then we would have kept going with default values and then create it.
+                // FIXME 
             }
             try {
-                Globals.LanuageSet = Util.GetInt32(interin.ReadLine());
+                Globals.LanguageSet = Util.GetInt32(interin.ReadLine());
 
-                switch (Globals.LanuageSet)
+                switch (Globals.LanguageSet)
                 {
                     case 0:
                         Globals.m_ResourceManager = new System.Resources.ResourceManager("L2_login.Languages.English", System.Reflection.Assembly.GetExecutingAssembly());

@@ -6,25 +6,25 @@ using System.Windows.Forms;
 
 namespace L2_login
 {
-	/// <summary>
-	/// Summary description for Login.
-	/// </summary>
-	public class Login : Base
-	{
-		private System.Windows.Forms.Panel panel_select;
-		private System.Windows.Forms.Button button_select_ig;
-		private System.Windows.Forms.Button button_select_oog;
-		private System.Windows.Forms.Panel panel_ig;
-		private System.Windows.Forms.ComboBox comboBox_ig_login;
-		private System.Windows.Forms.TextBox textBox_local_ip;
-		private System.Windows.Forms.TextBox textBox_ig_login_port;
-		private System.Windows.Forms.TextBox textBox_ig_login_ip;
+    /// <summary>
+    /// Summary description for Login.
+    /// </summary>
+    public class Login : Base
+    {
+        private System.Windows.Forms.Panel panel_select;
+        private System.Windows.Forms.Button button_select_ig;
+        private System.Windows.Forms.Button button_select_oog;
+        private System.Windows.Forms.Panel panel_ig;
+        private System.Windows.Forms.ComboBox comboBox_ig_login;
+        private System.Windows.Forms.TextBox textBox_local_ip;
+        private System.Windows.Forms.TextBox textBox_ig_login_port;
+        private System.Windows.Forms.TextBox textBox_ig_login_ip;
         private System.Windows.Forms.Button button_ig_listen;
-		private System.Windows.Forms.ComboBox comboBox_blowfish;
+        private System.Windows.Forms.ComboBox comboBox_blowfish;
         private System.Windows.Forms.TextBox textBox_blowfish;
-		private System.Windows.Forms.TextBox textBox_local_port;
-		private System.Windows.Forms.Label label_blowfishkey;
-		private System.Windows.Forms.Label label_localport;
+        private System.Windows.Forms.TextBox textBox_local_port;
+        private System.Windows.Forms.Label label_blowfishkey;
+        private System.Windows.Forms.Label label_localport;
         private System.Windows.Forms.Label label_loginserver;
         private System.Windows.Forms.Button button_back_ig;
         private TextBox textBox_oog_logon_ip;
@@ -162,19 +162,20 @@ namespace L2_login
         private CheckBox checkBox_security_old_client;
         private RadioButton radioButton_c17;
         private RadioButton radioButton_c18;
+        private RadioButton radioButton_c14;
         public ArrayList gameserver_list = new ArrayList();
 
-		public Login(System.Windows.Forms.Form pf)
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public Login(System.Windows.Forms.Form pf)
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
             add_controls_to_array();
             checkBox_advanced.Enabled = true;
             checkBox_Unknown_Blowfish.Enabled = true;
 
-			//
+            //
             textBox_blowfish.Text = Globals.pre_blowfish;
             textBox_logon_prot.Text = Globals.pre_protocol;
             textBox_local_port.Text = Globals.pre_login_port;
@@ -184,16 +185,19 @@ namespace L2_login
             textBox_IG_pin.Text = Globals.SecurityPin;
             checkBox_security_old_client.Checked = Globals.gamedata.SecurityPinOldClient;
 
-            switch(Globals.pre_chron)
+            switch (Globals.pre_chron)
             {
-                case 17: //Glory Days
+                case 14: // High Five
+                    radioButton_c14.Checked = true;
+                    break;
+                case 17: // Glory Days
                     radioButton_c17.Checked = true;
                     break;
                 case 18:
                     radioButton_c18.Checked = true;
                     break;
                 default:
-                    radioButton_c18.Checked = true;
+                    radioButton_c14.Checked = true;
                     break;
             }
 
@@ -294,23 +298,23 @@ namespace L2_login
 #endif
 
             comboBox_blowfish.SelectedIndexChanged += new EventHandler(comboBox_blowfish_SelectedIndexChanged);
-			comboBox_ig_login.SelectedIndexChanged += new EventHandler(comboBox_ig_login_SelectedIndexChanged);
-			comboBox_oog_login.SelectedIndexChanged += new EventHandler(comboBox_oog_login_SelectedIndexChanged);
+            comboBox_ig_login.SelectedIndexChanged += new EventHandler(comboBox_ig_login_SelectedIndexChanged);
+            comboBox_oog_login.SelectedIndexChanged += new EventHandler(comboBox_oog_login_SelectedIndexChanged);
 
-			this.MdiParent = pf;
-			this.MdiParent.Resize += new EventHandler(MdiParent_Resize);
-			MdiParent_Resize(null,null);
+            this.MdiParent = pf;
+            this.MdiParent.Resize += new EventHandler(MdiParent_Resize);
+            MdiParent_Resize(null, null);
 
-			Load_Servers();
+            Load_Servers();
             Load_GameServers();
-			Load_Blowfish();
+            Load_Blowfish();
             Load_EnterWorld();
 
-			UpdateUI();
-		}
+            UpdateUI();
+        }
 
-		public void UpdateUI()
-		{
+        public void UpdateUI()
+        {
             button_select_oog.Text = Globals.m_ResourceManager.GetString("button_select_oog");
             button_select_ig.Text = Globals.m_ResourceManager.GetString("button_select_ig");
             label_blowfishkey.Text = Globals.m_ResourceManager.GetString("label_blowfishkey");
@@ -321,14 +325,14 @@ namespace L2_login
             button_server.Text = Globals.m_ResourceManager.GetString("button_server");
             button_char.Text = Globals.m_ResourceManager.GetString("button_char");
             button_delete_char.Text = Globals.m_ResourceManager.GetString("button_delete_char");
-			this.Refresh();
-		}
+            this.Refresh();
+        }
 
         public void Disable_ip_edit(int index)//adifenix
         {
 
 
-            if((index<Globals.ew_con_array.Count) && (index >= 0))
+            if ((index < Globals.ew_con_array.Count) && (index >= 0))
             {
                 (Globals.ew_con_array[index] as System.Windows.Forms.TextBox).ReadOnly = true;
                 (Globals.ew_con_array[index] as System.Windows.Forms.TextBox).ForeColor = SystemColors.ControlText;
@@ -351,7 +355,7 @@ namespace L2_login
                 (Globals.ew_con_array[index] as System.Windows.Forms.TextBox).ReadOnly = false;
                 (Globals.ew_con_array[index] as System.Windows.Forms.TextBox).ForeColor = SystemColors.WindowText;
             }
-           }
+        }
 
 
         public void Enable_all_ip_edit()//adifenix
@@ -430,13 +434,13 @@ namespace L2_login
 
             if (Globals.pre_enterworld_ip)
             {
-               Globals.enterworld_ip = true;
-               c_ew_ip.Checked = true;
-                for(int i = 0;i<Globals.ew_con_array.Count;i++)
+                Globals.enterworld_ip = true;
+                c_ew_ip.Checked = true;
+                for (int i = 0; i < Globals.ew_con_array.Count; i++)
                 {
                     try
                     {
-                        if ((Globals.pre_enterworld_ip_tab[i].Length > 0) && (Globals.pre_enterworld_ip_tab[i].Length<=3))
+                        if ((Globals.pre_enterworld_ip_tab[i].Length > 0) && (Globals.pre_enterworld_ip_tab[i].Length <= 3))
                         {
                             (Globals.ew_con_array[i] as System.Windows.Forms.TextBox).Text = Globals.pre_enterworld_ip_tab[i];
                         }
@@ -452,31 +456,32 @@ namespace L2_login
                 }
             }
         }
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
             this.MdiParent.Resize -= new EventHandler(MdiParent_Resize);
 
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.panel_select = new System.Windows.Forms.Panel();
+            this.radioButton_c14 = new System.Windows.Forms.RadioButton();
             this.radioButton_c18 = new System.Windows.Forms.RadioButton();
             this.radioButton_c17 = new System.Windows.Forms.RadioButton();
             this.checkBox_LS_GS_Same_IP = new System.Windows.Forms.CheckBox();
@@ -632,6 +637,7 @@ namespace L2_login
             // 
             // panel_select
             // 
+            this.panel_select.Controls.Add(this.radioButton_c14);
             this.panel_select.Controls.Add(this.radioButton_c18);
             this.panel_select.Controls.Add(this.radioButton_c17);
             this.panel_select.Controls.Add(this.checkBox_LS_GS_Same_IP);
@@ -651,22 +657,34 @@ namespace L2_login
             this.panel_select.Size = new System.Drawing.Size(607, 445);
             this.panel_select.TabIndex = 0;
             // 
+            // radioButton_c14
+            // 
+            this.radioButton_c14.AutoSize = true;
+            this.radioButton_c14.Checked = true;
+            this.radioButton_c14.Location = new System.Drawing.Point(303, 20);
+            this.radioButton_c14.Name = "radioButton_c14";
+            this.radioButton_c14.Size = new System.Drawing.Size(70, 17);
+            this.radioButton_c14.TabIndex = 42;
+            this.radioButton_c14.TabStop = true;
+            this.radioButton_c14.Text = "High Five";
+            this.radioButton_c14.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.radioButton_c14.UseVisualStyleBackColor = true;
+            // 
             // radioButton_c18
             // 
-            this.radioButton_c18.Checked = true;
-            this.radioButton_c18.Location = new System.Drawing.Point(303, 34);
+            this.radioButton_c18.Location = new System.Drawing.Point(303, 67);
             this.radioButton_c18.Name = "radioButton_c18";
             this.radioButton_c18.Size = new System.Drawing.Size(135, 18);
-            this.radioButton_c18.TabIndex = 43;
-            this.radioButton_c18.TabStop = true;
+            this.radioButton_c18.TabIndex = 44;
             this.radioButton_c18.Text = "Lindvior";
+            this.radioButton_c18.Visible = false;
             // 
             // radioButton_c17
             // 
-            this.radioButton_c17.Location = new System.Drawing.Point(303, 12);
+            this.radioButton_c17.Location = new System.Drawing.Point(303, 43);
             this.radioButton_c17.Name = "radioButton_c17";
             this.radioButton_c17.Size = new System.Drawing.Size(135, 18);
-            this.radioButton_c17.TabIndex = 42;
+            this.radioButton_c17.TabIndex = 43;
             this.radioButton_c17.Text = "Glory Days";
             this.radioButton_c17.Visible = false;
             // 
@@ -2025,17 +2043,19 @@ namespace L2_login
             this.panel_oog.PerformLayout();
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private bool Set_Modes()
-		{
+        private bool Set_Modes()
+        {
             try
             {
 
                 string blowkey = textBox_blowfish.Text;
                 //blowkey.PadRight(20,' ');
                 Globals.gamedata.SetBlowfishKey(blowkey);
+                if (radioButton_c14.Checked)
+                    Globals.gamedata.Chron = Chronicle.CT2_6;
                 if (radioButton_c17.Checked)
                     Globals.gamedata.Chron = Chronicle.CT3_2;
                 if (radioButton_c18.Checked)
@@ -2049,52 +2069,52 @@ namespace L2_login
             }
         }
 
-		private void Load_Blowfish()
-		{
-			//load the blowfish list
-			blowfish_list.Clear();
-			System.IO.StreamReader blowfish_file = new System.IO.StreamReader("config\\blowfish.txt");
+        private void Load_Blowfish()
+        {
+            //load the blowfish list
+            blowfish_list.Clear();
+            System.IO.StreamReader blowfish_file = new System.IO.StreamReader("config\\blowfish.txt");
 
-			string b_name;
-			string b_ip;
+            string b_name;
+            string b_ip;
 
-			while( (b_name = blowfish_file.ReadLine()) != null)
-			{
-				b_ip = blowfish_file.ReadLine();
-				comboBox_blowfish.Items.Add(b_name);
-				blowfish_list.Add(b_ip);
-			}
-			blowfish_file.Close();
+            while ((b_name = blowfish_file.ReadLine()) != null)
+            {
+                b_ip = blowfish_file.ReadLine();
+                comboBox_blowfish.Items.Add(b_name);
+                blowfish_list.Add(b_ip);
+            }
+            blowfish_file.Close();
 
-			//Globals.l2net_home.Add_Text("loaded saved blowfish list", Globals.Red, TextType.BOT);
-		}
+            //Globals.l2net_home.Add_Text("loaded saved blowfish list", Globals.Red, TextType.BOT);
+        }
 
-		private void Load_Servers()
-		{
-			try
-			{
-				//load the login server list
-				loginserver_list.Clear();
-				System.IO.StreamReader login_file = new System.IO.StreamReader("config\\loginlist.txt");
+        private void Load_Servers()
+        {
+            try
+            {
+                //load the login server list
+                loginserver_list.Clear();
+                System.IO.StreamReader login_file = new System.IO.StreamReader("config\\loginlist.txt");
 
-				string l_name;
-				string l_ip;
+                string l_name;
+                string l_ip;
 
-				while( (l_name = login_file.ReadLine()) != null)
-				{
-					l_ip = login_file.ReadLine();
-					comboBox_ig_login.Items.Add(l_name);
-					comboBox_oog_login.Items.Add(l_name);
-					loginserver_list.Add(l_ip);
-				}
-				login_file.Close();
-				//Globals.l2net_home.Add_Text("loaded saved server list", Globals.Red, TextType.BOT);
-			}
-			catch
-			{
-				Globals.l2net_home.Add_Error("failed to load saved server list");
-			}
-		}
+                while ((l_name = login_file.ReadLine()) != null)
+                {
+                    l_ip = login_file.ReadLine();
+                    comboBox_ig_login.Items.Add(l_name);
+                    comboBox_oog_login.Items.Add(l_name);
+                    loginserver_list.Add(l_ip);
+                }
+                login_file.Close();
+                //Globals.l2net_home.Add_Text("loaded saved server list", Globals.Red, TextType.BOT);
+            }
+            catch
+            {
+                Globals.l2net_home.Add_Error("failed to load saved server list");
+            }
+        }
 
         private void Load_GameServers()
         {
@@ -2114,7 +2134,7 @@ namespace L2_login
                     gameserver_list.Add(gs_ip);
                 }
                 gs_file.Close();
-               // Globals.l2net_home.Add_Text("loaded saved gameserver list", Globals.Red, TextType.BOT);
+                // Globals.l2net_home.Add_Text("loaded saved gameserver list", Globals.Red, TextType.BOT);
             }
             catch
             {
@@ -2133,7 +2153,7 @@ namespace L2_login
 
                 textBox_Custom_EnterWorld.Text = ew;
 
-             //   Globals.l2net_home.Add_Text("loaded saved enterworld packet", Globals.Red, TextType.BOT);
+                //   Globals.l2net_home.Add_Text("loaded saved enterworld packet", Globals.Red, TextType.BOT);
             }
             catch
             {
@@ -2141,18 +2161,18 @@ namespace L2_login
             }
         }
 
-		private void comboBox_ig_login_SelectedIndexChanged(object sender, EventArgs e)
-		{
+        private void comboBox_ig_login_SelectedIndexChanged(object sender, EventArgs e)
+        {
             string s = loginserver_list[comboBox_ig_login.SelectedIndex].ToString();
             string s2 = null;
-            string[] words = s.Split(' ',':');
+            string[] words = s.Split(' ', ':');
             textBox_ig_login_ip.Text = words[0];
             try
             {
                 s2 = words[1];
             }
             catch
-            {    
+            {
                 //Old loginlist.txt file
                 //Globals.l2net_home.Add_Error("No port set in loginlist.txt, defaulting to port 2106");
                 textBox_ig_login_port.Text = "2106";
@@ -2161,11 +2181,11 @@ namespace L2_login
             {
                 textBox_ig_login_port.Text = s2;
             }
-			//textBox_ig_login_ip.Text = loginserver_list[comboBox_ig_login.SelectedIndex].ToString();
-		}
+            //textBox_ig_login_ip.Text = loginserver_list[comboBox_ig_login.SelectedIndex].ToString();
+        }
 
-		private void comboBox_oog_login_SelectedIndexChanged(object sender, EventArgs e)
-		{
+        private void comboBox_oog_login_SelectedIndexChanged(object sender, EventArgs e)
+        {
             string s = loginserver_list[comboBox_oog_login.SelectedIndex].ToString();
             string s2 = null;
             string[] words = s.Split(' ', ':');
@@ -2184,25 +2204,25 @@ namespace L2_login
             {
                 textBox_oog_logon_port.Text = s2;
             }
-			//textBox_oog_logon_ip.Text = loginserver_list[comboBox_oog_login.SelectedIndex].ToString();
-		}
+            //textBox_oog_logon_ip.Text = loginserver_list[comboBox_oog_login.SelectedIndex].ToString();
+        }
 
-		private void comboBox_blowfish_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			textBox_blowfish.Text = blowfish_list[comboBox_blowfish.SelectedIndex].ToString();
-		}
+        private void comboBox_blowfish_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBox_blowfish.Text = blowfish_list[comboBox_blowfish.SelectedIndex].ToString();
+        }
 
-		private void button_select_oog_Click(object sender, System.EventArgs e)
-		{
-			if(Set_Modes())
-			    panel_oog.BringToFront();
-		}
+        private void button_select_oog_Click(object sender, System.EventArgs e)
+        {
+            if (Set_Modes())
+                panel_oog.BringToFront();
+        }
 
-		private void button_select_ig_Click(object sender, System.EventArgs e)
-		{
-			if(Set_Modes())
-			    panel_ig.BringToFront();
-		}
+        private void button_select_ig_Click(object sender, System.EventArgs e)
+        {
+            if (Set_Modes())
+                panel_ig.BringToFront();
+        }
 
         private void Save_Common()
         {
@@ -2260,9 +2280,9 @@ namespace L2_login
             }
         }
 
-/******************In game login section*************************/
-		private void button_ig_listen_Click(object sender, System.EventArgs e)
-		{
+        /******************In game login section*************************/
+        private void button_ig_listen_Click(object sender, System.EventArgs e)
+        {
             if (checkBox_OverrideProtocol.Checked)
             {
                 Globals.gamedata.OverrideProtocol = true;
@@ -2279,8 +2299,8 @@ namespace L2_login
             {
                 Globals.gamedata.SecurityPinOldClient = false;
             }
-			button_back_ig.Enabled = false;
-			button_ig_listen.Enabled = false;
+            button_back_ig.Enabled = false;
+            button_ig_listen.Enabled = false;
             Globals.OOG = false;
 
             Globals.gamedata.IG_Local_IP = textBox_local_ip.Text;
@@ -2293,11 +2313,11 @@ namespace L2_login
             Save_Common();
 
             LoginServer.IG_Init();
-    	}
-		
-/******************out of game login section*************************/
-		private void button_logon_Click(object sender, System.EventArgs e)
-		{
+        }
+
+        /******************out of game login section*************************/
+        private void button_logon_Click(object sender, System.EventArgs e)
+        {
             if (Globals.Login_State != 0)
             {
                 Globals.l2net_home.Add_Error("wrong state...");
@@ -2305,8 +2325,8 @@ namespace L2_login
                 return;
             }
 
-			button_back_oog.Enabled = false;
-			button_logon.Enabled = false;
+            button_back_oog.Enabled = false;
+            button_logon.Enabled = false;
             Globals.OOG = true;
 
             Globals.UserName = textBox_lname.Text;
@@ -2319,7 +2339,7 @@ namespace L2_login
             Save_Common();
 
             LoginServer.OOG_Init();
-		}
+        }
 
         delegate void FillServerInfoCallback(byte[] dec_buff);
         public void FillServerInfo(byte[] dec_buff)
@@ -2364,39 +2384,39 @@ namespace L2_login
             button_server.Enabled = true;
         }
 
-		private void button_server_Click(object sender, System.EventArgs e)
-		{
-			button_server.Enabled = false;
+        private void button_server_Click(object sender, System.EventArgs e)
+        {
+            button_server.Enabled = false;
 
-			try
-			{
+            try
+            {
                 if (Globals.Login_State != 1)
-				{
-					Globals.l2net_home.Add_Error("wrong state...");
-					button_server.Enabled = true;
-					return;
-				}
+                {
+                    Globals.l2net_home.Add_Error("wrong state...");
+                    button_server.Enabled = true;
+                    return;
+                }
 
-				if(listView_servers.SelectedIndices.Count == 0)
-				{
-					Globals.l2net_home.Add_Error("select a server first...");
-					button_server.Enabled = true;
-					return;
-				}
+                if (listView_servers.SelectedIndices.Count == 0)
+                {
+                    Globals.l2net_home.Add_Error("select a server first...");
+                    button_server.Enabled = true;
+                    return;
+                }
 
                 Globals.Login_SelectedServer = uint.Parse(listView_servers.Items[listView_servers.SelectedIndices[0]].SubItems[0].Text, System.Globalization.NumberStyles.HexNumber);
 
                 LoginServer.OOG_SelectServer();
-			}
-			catch
-			{
-				Globals.l2net_home.Add_Error("crash: ServerSelect");
-			}
-		}
+            }
+            catch
+            {
+                Globals.l2net_home.Add_Error("crash: ServerSelect");
+            }
+        }
 
         delegate void CharListCallback(ByteBuffer bb);
-		public void CharList(ByteBuffer bb)
-		{
+        public void CharList(ByteBuffer bb)
+        {
             if (this.listView_servers.InvokeRequired)
             {
                 CharListCallback d = new CharListCallback(CharList);
@@ -2404,9 +2424,9 @@ namespace L2_login
                 return;
             }
 
-			/******************time to read in the char data**************/
+            /******************time to read in the char data**************/
             Globals.l2net_home.Add_Text("Getting char list", Globals.Red, TextType.BOT);
-            
+
             int char_count = bb.ReadInt32();
             bb.ReadInt32();//dunno?
             bb.ReadByte();
@@ -2417,24 +2437,24 @@ namespace L2_login
                 bb.ReadInt32(); //00 00 00 00
             }
 
-			ListViewItem ObjListItem;
+            ListViewItem ObjListItem;
 
             listView_chars.BeginUpdate();
 
             listView_chars.Items.Clear();
-			
-			for(int i = 0; i < char_count; i++)
-			{
-				ObjListItem = listView_chars.Items.Add(bb.ReadString());//name
-				ObjListItem.SubItems.Add(bb.ReadUInt32().ToString("X"));//id
+
+            for (int i = 0; i < char_count; i++)
+            {
+                ObjListItem = listView_chars.Items.Add(bb.ReadString());//name
+                ObjListItem.SubItems.Add(bb.ReadUInt32().ToString("X"));//id
                 ObjListItem.SubItems.Add(bb.ReadString());//login name
-				ObjListItem.SubItems.Add(bb.ReadUInt32().ToString("X"));//session id
+                ObjListItem.SubItems.Add(bb.ReadUInt32().ToString("X"));//session id
                 ObjListItem.SubItems.Add(bb.ReadUInt32().ToString());//clan id
                 ObjListItem.SubItems.Add(bb.ReadUInt32().ToString());//???
                 if (bb.ReadUInt32() == 0x00)//sex
-					ObjListItem.SubItems.Add("Male");
-				else
-					ObjListItem.SubItems.Add("Female");
+                    ObjListItem.SubItems.Add("Male");
+                else
+                    ObjListItem.SubItems.Add("Female");
                 ObjListItem.SubItems.Add(Util.GetRace(bb.ReadUInt32()));//race
                 ObjListItem.SubItems.Add(Util.GetClass(bb.ReadUInt32()));//base class id
                 ObjListItem.SubItems.Add(bb.ReadUInt32().ToString());//active
@@ -2442,9 +2462,9 @@ namespace L2_login
                 ObjListItem.SubItems.Add(bb.ReadInt32().ToString());//y
                 ObjListItem.SubItems.Add(bb.ReadInt32().ToString());//z
                 ObjListItem.SubItems.Add(bb.ReadDouble().ToString());//hp
-				ObjListItem.SubItems.Add(bb.ReadDouble().ToString());//mp
+                ObjListItem.SubItems.Add(bb.ReadDouble().ToString());//mp
                 ObjListItem.SubItems.Add(bb.ReadUInt32().ToString());//sp
-				//C5 has 8bytes for XP
+                                                                     //C5 has 8bytes for XP
                 ObjListItem.SubItems.Add(bb.ReadUInt64().ToString());//xp
                 if (Globals.gamedata.Chron >= Chronicle.CT2_6)
                 {
@@ -2474,27 +2494,27 @@ namespace L2_login
                 {
                     bb.SetIndex(bb.GetIndex() + 36);
                 }
-			}
+            }
 
             listView_chars.EndUpdate();
 
             Globals.Login_State = 2;
             button_char.Enabled = true;
             button_delete_char.Enabled = true;
-		}
+        }
 
-		private void button_char_Click(object sender, System.EventArgs e)
-		{
-			button_char.Enabled = false;
+        private void button_char_Click(object sender, System.EventArgs e)
+        {
+            button_char.Enabled = false;
 
-			try
-			{
-				if(listView_chars.SelectedIndices.Count == 0)
-				{
-					Globals.l2net_home.Add_Error("select a char first...");
-					button_char.Enabled = true;
-					return;
-				}
+            try
+            {
+                if (listView_chars.SelectedIndices.Count == 0)
+                {
+                    Globals.l2net_home.Add_Error("select a char first...");
+                    button_char.Enabled = true;
+                    return;
+                }
 
                 Globals.l2net_home.Add_Text("logging into char", Globals.Red, TextType.BOT);
 
@@ -2522,22 +2542,22 @@ namespace L2_login
                 ServerPackets.SelectChar(listView_chars.SelectedIndices[0]);
 
                 Globals.Login_State = 3;
-			}
-			catch
-			{
-				Globals.l2net_home.Add_Error("crash: CharLogin");
-			}
-		}
+            }
+            catch
+            {
+                Globals.l2net_home.Add_Error("crash: CharLogin");
+            }
+        }
 
-		private void button_back_ig_Click(object sender, System.EventArgs e)
-		{
-			panel_select.BringToFront();
-		}
+        private void button_back_ig_Click(object sender, System.EventArgs e)
+        {
+            panel_select.BringToFront();
+        }
 
-		private void button_back_oog_Click(object sender, System.EventArgs e)
-		{
-			panel_select.BringToFront();
-		}
+        private void button_back_oog_Click(object sender, System.EventArgs e)
+        {
+            panel_select.BringToFront();
+        }
 
         private void button_oog_create_Click(object sender, EventArgs e)
         {
@@ -2571,7 +2591,7 @@ namespace L2_login
                     return;
                 }
 
-                if (MessageBox.Show("Are you sure you want to delete char in slot: "+ listView_chars.SelectedIndices[0] + " ?", "Delete Verification", MessageBoxButtons.YesNo) == DialogResult.No)
+                if (MessageBox.Show("Are you sure you want to delete char in slot: " + listView_chars.SelectedIndices[0] + " ?", "Delete Verification", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
                     return;
                 }
@@ -2641,18 +2661,18 @@ namespace L2_login
             }
             else // off - hide edits
             {
-                Globals.enterworld_ip =false;
+                Globals.enterworld_ip = false;
                 Disable_all_ip_edit();
             }
         }
 
         private void chc_ew_iprand(object sender, EventArgs e)
         {
-            
-            for(int i = 0 ; i<Globals.ew_chc_ed_array.Count;i++)
+
+            for (int i = 0; i < Globals.ew_chc_ed_array.Count; i++)
                 if (Globals.ew_chc_ed_array[i] == sender)
                 {
-                    if((Globals.ew_chc_ed_array[i] as System.Windows.Forms.CheckBox).Checked)
+                    if ((Globals.ew_chc_ed_array[i] as System.Windows.Forms.CheckBox).Checked)
                     {
                         Disable_ip_edit(i);
                     }
@@ -2671,7 +2691,7 @@ namespace L2_login
 
         private void ch_w_a_s_CheckedChanged(object sender, EventArgs e)
         {
-            if(ch_w_a_s.Checked)
+            if (ch_w_a_s.Checked)
             {
                 Globals.proxy_serv = true;
             }
@@ -2688,7 +2708,7 @@ namespace L2_login
 
         private void textBox_pword_KeyDown(object sender, KeyEventArgs e)
         {
-            
+
             if (e.KeyCode == Keys.Return)
             {
                 button_logon.PerformClick();

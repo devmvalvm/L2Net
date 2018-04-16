@@ -504,22 +504,53 @@ namespace L2_login
                             //need to grab the new blowfish key
                             byte[] tmp_bf = new byte[16];
 
-#if DEBUG
-                        login_serverout.Write("blowfish key:");
-#endif
-
-                            for (int i = 0; i < 16; i++)
-                            {
+                            for (int i = 0; i < 16; i++) {
                                 tmp_bf[i] = dec_buff[153 + i];
-#if DEBUG
-                            login_serverout.Write(tmp_bf[i].ToString("X2"));
-#endif
                             }
-#if DEBUG
-                        login_serverout.WriteLine("");
-#endif
-
                             Globals.gamedata.SetBlowfishKey(tmp_bf);
+
+                            // And also the RSA Key to decrypt the outgoing messages
+                            byte[] rsaKey = new byte[128];
+                            for (int i = 0; i < 128; i++) {
+                                rsaKey[i] = dec_buff[9 + i];
+                            }
+
+                            // step 4 : xor last 0x40 bytes with  first 0x40 bytes
+                            for (int i = 0; i < 0x40; i++)
+                            {
+                                rsaKey[0x40 + i] = (byte)(rsaKey[0x40 + i] ^ rsaKey[i]);
+                            }
+                            // step 3 : xor bytes 0x0d-0x10 with bytes 0x34-0x38
+                            for (int i = 0; i < 4; i++)
+                            {
+                                rsaKey[0x0d + i] = (byte)(rsaKey[0x0d + i] ^ rsaKey[0x34 + i]);
+                            }
+                            // step 2 : xor first 0x40 bytes with  last 0x40 bytes 
+                            for (int i = 0; i < 0x40; i++)
+                            {
+                                rsaKey[i] = (byte)(rsaKey[i] ^ rsaKey[0x40 + i]);
+                            }
+                            // step 1 : 0x4d-0x50 <-> 0x00-0x04
+                            for (int i = 0; i < 4; i++)
+                            {
+                                byte temp = rsaKey[0x00 + i];
+                                rsaKey[0x00 + i] = rsaKey[0x4d + i];
+                                rsaKey[0x4d + i] = temp;
+                            }
+
+#if DEBUG
+                            login_serverout.Write("blowfish key:");
+                            for (int i = 0; i < 16; i++) {
+                                login_serverout.Write(tmp_bf[i].ToString("X2"));
+                            }
+                            login_serverout.WriteLine("");
+
+                            login_serverout.WriteLine("RSA Key:");
+                            for (int i = 0; i < 128; i++) {
+                                login_serverout.Write(rsaKey[i].ToString("X2"));
+                            }
+                            login_serverout.WriteLine("");
+#endif
                         }
                         else
                         {
@@ -874,6 +905,8 @@ namespace L2_login
 			try
 			{
 #endif
+
+
             Globals.l2net_home.Add_Text("Starting login Process", Globals.Red, TextType.BOT);
 
             OpenLoginServerConnection();
@@ -1175,26 +1208,25 @@ namespace L2_login
                         #region GameGuard verify reply
                         Globals.l2net_home.Add_Text("login info - packing username/pw", Globals.Red, TextType.BOT);
 
-                        byte[] login_info_user = new byte[128];
-                        byte[] login_info_pass = new byte[128];
+                        byte[] login_info = new byte[128];
 
-                        if (Globals.UserName.Length > 50)
+                        if (Globals.UserName.Length > 14)
                             Globals.l2net_home.Add_Error("username is too long");
                         if (Globals.Password.Length > 16)
                             Globals.l2net_home.Add_Error("password is too long");
 
                         //24 thingy?
-                        //login_info[0x5B] = 0x24;
+                        login_info[0x5B] = 0x24;
 
                         //pack the username
                         for (int i = 0; i < Globals.UserName.Length; i++)
                         {
-                            login_info_user[0x4E + i] = (byte)Globals.UserName[i];
+                            login_info[0x5E + i] = (byte)Globals.UserName[i];
                         }
                         //pack the password
                         for (int i = 0; i < Globals.Password.Length; i++)
                         {
-                            login_info_pass[0x5C + i] = (byte)Globals.Password[i];
+                            login_info[0x6C + i] = (byte)Globals.Password[i];
                         }
 
                         Globals.l2net_home.Add_Text("login info - rsa start", Globals.Red, TextType.BOT);
@@ -1204,26 +1236,21 @@ namespace L2_login
                         //Create a new instance of RSAParameters.
                         System.Security.Cryptography.RSAParameters RSAKeyInfo = new System.Security.Cryptography.RSAParameters();
 
-                        //Set RSAKeyInfo to the public key values. 
-                        RSAKeyInfo.Modulus = enckey;
+                        RSAKeyInfo.Modulus  = enckey;
                         RSAKeyInfo.Exponent = Exponent;
 
-                        RSAManaged poo = new RSAManaged();
-                        poo.ImportParameters(RSAKeyInfo);
+                        RSAManaged rsaHandler = new RSAManaged();
+                        rsaHandler.ImportParameters(RSAKeyInfo);
 
                         byte[] outb = new byte[128];
-                        byte[] outc = new byte[128];
-
-                        outb = poo.EncryptValue(login_info_user);
-                        outc = poo.EncryptValue(login_info_pass);
+                        outb = rsaHandler.EncryptValue(login_info);
 
                         Globals.l2net_home.Add_Text("login info - rsa end", Globals.Red, TextType.BOT);
 
-                        byte[] login_send = new byte[320];
-                        byte[] login_sende = new byte[320];
+                        byte[] login_send = new byte[176];
+                        byte[] login_sende = new byte[176];
 
                         outb.CopyTo(login_send, 1);
-                        outc.CopyTo(login_send, 129);
                         //need to put the other 40bytes here
 
                         Globals.l2net_home.Add_Text("login info - gameguard start", Globals.Red, TextType.BOT);
@@ -1233,10 +1260,10 @@ namespace L2_login
                         //new (TODO need to check this)
                         //23 92 90 4D 18 30 B5 7C 96 61 41 47 05 07 96 FB
                         //23 01 00 00 67 45 00 00 AB 89 00 00 EF CD 00 00 - 1057
-                        login_send[257] = sess[0];
-                        login_send[258] = sess[1];
-                        login_send[259] = sess[2];
-                        login_send[260] = sess[3];
+                        login_send[129] = sess[0];
+                        login_send[130] = sess[1];
+                        login_send[131] = sess[2];
+                        login_send[132] = sess[3];
 
                         byte[] query = new byte[16];
                         for (int ii = 0; ii < 16; ii++)
@@ -1256,108 +1283,79 @@ namespace L2_login
                             byte[] reply = (byte[])Globals.GG_List[gg];
 
                             //start at byte 5 is the gg query
-                            login_send[261] = reply[0];//gameguard reply start
-                            login_send[262] = reply[1];
-                            login_send[263] = reply[2];
-                            login_send[264] = reply[3];
-                            login_send[265] = reply[4];//
-                            login_send[266] = reply[5];
-                            login_send[267] = reply[6];
-                            login_send[268] = reply[7];
-                            login_send[269] = reply[8];//
-                            login_send[270] = reply[9];
-                            login_send[271] = reply[10];
-                            login_send[272] = reply[11];
-                            login_send[273] = reply[12];//
-                            login_send[274] = reply[13];
-                            login_send[275] = reply[14];
-                            login_send[276] = reply[15];//game guard reply stop
+                            login_send[133] = reply[0];//gameguard reply start
+                            login_send[134] = reply[1];
+                            login_send[135] = reply[2];
+                            login_send[136] = reply[3];
+                            login_send[137] = reply[4];//
+                            login_send[138] = reply[5];
+                            login_send[139] = reply[6];
+                            login_send[140] = reply[7];
+                            login_send[141] = reply[8];//
+                            login_send[142] = reply[9];
+                            login_send[143] = reply[10];
+                            login_send[144] = reply[11];
+                            login_send[145] = reply[12];//
+                            login_send[146] = reply[13];
+                            login_send[147] = reply[14];
+                            login_send[148] = reply[15];//game guard reply stop
                         }
                         else
                         {
                             Globals.l2net_home.Add_Text("login info - gameguard UNknown query... sending reply for blank query...", Globals.Red, TextType.BOT);
 
-                            login_send[261] = 0x23;//gameguard reply start
-                            login_send[262] = 0x01;
-                            login_send[263] = 0x00;
-                            login_send[264] = 0x00;
-                            login_send[265] = 0x67;//
-                            login_send[266] = 0x45;
-                            login_send[267] = 0x00;
-                            login_send[268] = 0x00;
-                            login_send[269] = 0xAB;//
-                            login_send[270] = 0x89;
-                            login_send[271] = 0x00;
-                            login_send[272] = 0x00;
-                            login_send[273] = 0xEF;//
-                            login_send[274] = 0xCD;
-                            login_send[275] = 0x00;
-                            login_send[276] = 0x00;//game guard reply stop
+                            login_send[133] = 0x23;//gameguard reply start
+                            login_send[134] = 0x01;
+                            login_send[135] = 0x00;
+                            login_send[136] = 0x00;
+                            login_send[137] = 0x67;//
+                            login_send[138] = 0x45;
+                            login_send[139] = 0x00;
+                            login_send[140] = 0x00;
+                            login_send[141] = 0xAB;//
+                            login_send[142] = 0x89;
+                            login_send[143] = 0x00;
+                            login_send[144] = 0x00;
+                            login_send[145] = 0xEF;//
+                            login_send[146] = 0xCD;
+                            login_send[147] = 0x00;
+                            login_send[148] = 0x00;//game guard reply stop
                         }
 
-                        login_send[277] = 0x08;//08 00 00 00 00 00 00
-
-                        //40 4F 61 4F 21 19 3C 62 
-                        login_send[284] = 0x40;
-                        login_send[285] = 0x4F;
-                        login_send[286] = 0x61;
-                        login_send[287] = 0x4F;
-                        login_send[288] = 0x21;
-                        login_send[289] = 0x19;
-                        login_send[290] = 0x3C;
-                        login_send[291] = 0x62;
-
-
-                        //2A 6A 8B 2A 3B 3D 7C EF 
-                        login_send[292] = 0x2A;
-                        login_send[293] = 0x6A;
-                        login_send[294] = 0x8B;
-                        login_send[295] = 0x2A;
-                        login_send[296] = 0x3B;
-                        login_send[297] = 0x3D;
-                        login_send[298] = 0x7C;
-                        login_send[299] = 0xEF;
-                        //00 00 00 00 
-                        //03 C8 56 FB 
-                        login_send[304] = 0x03;
-                        login_send[305] = 0xC8;
-                        login_send[306] = 0x56;
-                        login_send[307] = 0xFB;
-                        //00 00 00 00 00 00 00 00 00 00 00 00 
-
-                        //login_send[150] = 0x00;
-                        //login_send[151] = 0x00;
-                        //login_send[152] = 0x00;
-                        //login_send[153] = 0x00;//
-                        //login_send[154] = 0x00;
-                        //login_send[155] = 0x00;
-                        //login_send[156] = 0x00;
-                        //login_send[157] = 0x00;//
-                        //login_send[158] = 0x00;
-                        //login_send[159] = 0x00;
+                        login_send[149] = 0x08;
+                        login_send[150] = 0x00;
+                        login_send[151] = 0x00;
+                        login_send[152] = 0x00;
+                        login_send[153] = 0x00;
+                        login_send[154] = 0x00;
+                        login_send[155] = 0x00;
+                        login_send[156] = 0x00;
+                        login_send[157] = 0x00;
+                        login_send[158] = 0x00;
+                        login_send[159] = 0x00;
 
                         Globals.l2net_home.Add_Text("login info - gameguard end/checksum start", Globals.Red, TextType.BOT);
 
-                        NewCrypt.appendChecksum(login_send, 0, 308);
+                        NewCrypt.appendChecksum(login_send, 0, 164);
 
                         Globals.l2net_home.Add_Text("login info - checksum end", Globals.Red, TextType.BOT);
 
                         //need to encode with blowfish
                         bfeng.init(true, Globals.gamedata.blow_key);
-                        bfeng.processBigBlock(login_send, 0, login_sende, 0, 320);
+                        bfeng.processBigBlock(login_send, 0, login_sende, 0, 176);
 
                         Globals.l2net_home.Add_Text("login info - blowfish done", Globals.Red, TextType.BOT);
 
-                        byte[] login_send2 = new byte[322];
-                        login_send2[0] = 0x42;
-                        login_send2[1] = 0x01;
+                        byte[] login_send2 = new byte[178];
+                        login_send2[0] = 0xB2;
+                        login_send2[1] = 0x00;
 
                         login_sende.CopyTo(login_send2, 2);
 
                         Globals.l2net_home.Add_Text("login info - sending login info", Globals.Red, TextType.BOT);
 
                         //this line sends the login data
-                        Globals.Login_GameSocket.Send(login_send2, 0, 322, System.Net.Sockets.SocketFlags.None);
+                        Globals.Login_GameSocket.Send(login_send2, 0, 178, System.Net.Sockets.SocketFlags.None);
 
                         Globals.l2net_home.Add_Text("login info - login info sent", Globals.Red, TextType.BOT);
                         break;

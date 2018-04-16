@@ -313,6 +313,12 @@ namespace L2_login
                     ServerPackets.RequestSkillList();
                     Globals.Got_Skills = true;
                 }
+
+                // Setup BotOptions according to command-line-arguments given Options file
+                if ((!String.IsNullOrEmpty(Globals.BotOptionsFile)) && (Globals.botoptionsscreen == null || Globals.botoptionsscreen.IsDisposed == true))
+                {
+                    Globals.botoptionsscreen = new BotOptionsScreen();
+                }
             }
 
             switch (type)
@@ -2057,70 +2063,42 @@ namespace L2_login
             //need to check if anything had this targeted and set it's Dest_ to the current location
         }
 
-        public static void StatusUpdate(ByteBuffer buffe)
+        public static void StatusUpdate(ByteBuffer DataBuffer)
         {
-            uint data1 = buffe.ReadUInt32();//ID
+            uint EntityID = DataBuffer.ReadUInt32();
 
-
-            buffe.ReadUInt32(); //??
-
-            buffe.ReadByte(); //1 or 0
-            uint data2 = buffe.ReadByte(); //count
-
-            TargetType type = Util.GetType(data1);
-
-            switch (type)
+            TargetType EntityType = Util.GetType(EntityID);
+            switch (EntityType)
             {
                 case TargetType.SELF:
-                    for (uint i = 0; i < data2; i++)
-                    {
-                        Globals.gamedata.my_char.Update(buffe);
-                    }
+                    Globals.gamedata.my_char.Update(DataBuffer);
                     AddInfo.Set_Char_Info_Basic();
                     BroadcastThread.SendSelfStatus();
                     break;
                 case TargetType.MYPET:
-                    for (uint i = 0; i < data2; i++)
-                    {
-                        Globals.gamedata.my_pet.Update(buffe);
-                    }
+                    Globals.gamedata.my_pet.Update(DataBuffer);
                     BroadcastThread.SendSelfStatus();
                     break;
                 case TargetType.MYPET1:
-                    for (uint i = 0; i < data2; i++)
-                    {
-                        Globals.gamedata.my_pet1.Update(buffe);
-                    }
+                    Globals.gamedata.my_pet1.Update(DataBuffer);
                     BroadcastThread.SendSelfStatus();
                     break;
                 case TargetType.MYPET2:
-                    for (uint i = 0; i < data2; i++)
-                    {
-                        Globals.gamedata.my_pet2.Update(buffe);
-                    }
+                    Globals.gamedata.my_pet2.Update(DataBuffer);
                     BroadcastThread.SendSelfStatus();
                     break;
                 case TargetType.MYPET3:
-                    for (uint i = 0; i < data2; i++)
-                    {
-                        Globals.gamedata.my_pet3.Update(buffe);
-                    }
+                    Globals.gamedata.my_pet3.Update(DataBuffer);
                     BroadcastThread.SendSelfStatus();
                     break;
                 case TargetType.PLAYER:
                     Globals.PlayerLock.EnterReadLock();
                     try
                     {
-                        CharInfo player = Util.GetChar(data1);
-
+                        CharInfo player = Util.GetChar(EntityID);
                         if (player != null)
-                        {
-                            for (uint i2 = 0; i2 < data2; i2++)
-                            {
-                                player.Update(buffe);
-                            }
-                        }
-                    }//unlock
+                             player.Update(DataBuffer);
+                    }
                     finally
                     {
                         Globals.PlayerLock.ExitReadLock();
@@ -2130,17 +2108,10 @@ namespace L2_login
                     Globals.NPCLock.EnterReadLock();
                     try
                     {
-                        NPCInfo npc = Util.GetNPC(data1);
-
+                        NPCInfo npc = Util.GetNPC(EntityID);
                         if (npc != null)
-                        {
-                            Globals.l2net_home.Add_Text("Got npc: " + npc.Name);
-                            for (uint i2 = 0; i2 < data2; i2++)
-                            {
-                                npc.Update(buffe);
-                            }
-                        }
-                    }//unlock
+                            npc.Update(DataBuffer);
+                    }
                     finally
                     {
                         Globals.NPCLock.ExitReadLock();
@@ -2148,7 +2119,7 @@ namespace L2_login
                     break;
             }
 
-            if (data1 == Globals.gamedata.my_char.TargetID)
+            if (EntityID == Globals.gamedata.my_char.TargetID)
             {
                 AddInfo.Set_Target_HP();
             }
@@ -3662,8 +3633,8 @@ namespace L2_login
 
         public static void Add_PartyInfo(ByteBuffer buff)
         {
-            buff.ReadUInt32();
-            buff.ReadUInt32();
+            Globals.gamedata.PartyLeader = buff.ReadUInt32();
+            Globals.gamedata.PartyLoot = buff.ReadUInt32();
 
             PartyMember pmem = new PartyMember();
             pmem.Load(buff);

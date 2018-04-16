@@ -257,14 +257,14 @@ namespace L2_login
         
         public static bool pre_agree = false;
         public static string pre_blowfish = "6B60CB5B82CE90B1CC2B6C556C6C6C6C";
-        public static string pre_protocol = "532";
+        public static string pre_protocol = "273";  // FIXME Should change according to chronicle selected based on login's radio buttons. Lindvior is 532
         public static string pre_login_port = "2106";
-        public static string pre_login_ip = "64.25.35.104";
+        public static string pre_login_ip = "54.36.126.163";    // Too lazy to do the right thing here. Setting it up for L2Idle FIXME
         public static string pre_username = "";
         public static string pre_password = "";
         public static string pre_IG_listen_port = "2106";
         public static string pre_IG_listen_ip = "127.0.0.1";
-        public static int pre_chron = 18;
+        public static int pre_chron = 14;
         public static bool pre_chron_cmd = false;
 
         //added to support advanced command options
@@ -548,7 +548,7 @@ namespace L2_login
         public static SortedList clanlist = new SortedList();
 
         public static ResourceManager m_ResourceManager = new ResourceManager("L2_login.Languages.English", System.Reflection.Assembly.GetExecutingAssembly());
-        public static int LanuageSet = 0;
+        public static int LanguageSet = 0;
 
         //public static uint LootType = 1;//1 - random
         public static uint ClanOnline = 0;

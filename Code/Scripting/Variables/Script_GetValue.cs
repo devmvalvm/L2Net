@@ -512,6 +512,11 @@ namespace L2_login
 				    scr_var.Type = Var_Types.INT;
 				    scr_var.Value = (long)Globals.gamedata.my_char.aug_LRHand;
 				    break;
+                case "PARTY_LEADER":
+                    scr_var.Name = "PARTY_LEADER";
+                    scr_var.Type = Var_Types.INT;
+                    scr_var.Value = (int)Globals.gamedata.PartyLeader;
+                    break;
                 case "PET_NAME":
                     scr_var.Name = "PET_NAME";
                     scr_var.Type = Var_Types.STRING;

@@ -143,6 +143,11 @@ namespace L2_login
                         Globals.pre_username = data;
                         break;
 
+                    case "-o":
+                    case "-options":
+                        Globals.BotOptionsFile = data;
+                        break;
+                   
                     case "-s":
                     case "-script":
                         Globals.Script_MainFile = data;

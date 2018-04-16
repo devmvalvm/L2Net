@@ -35,22 +35,22 @@ namespace L2_login
 
             try
             {
-                data_lvlexp = GetData(Globals.PATH + "\\data\\lvlexp.txt");
+                data_lvlexp     = GetData(Globals.PATH + "\\data\\lvlexp.txt");
                 data_servername = GetData(Globals.PATH + "\\data\\servername.txt");
-                data_systemmsg = GetData(Globals.PATH + "\\data\\systemmsg.txt");
-                data_hennagrp = GetData(Globals.PATH + "\\data\\hennagrp.txt");
-                data_npcname = GetData(Globals.PATH + "\\data\\npcname.txt");
-                data_itemname = GetData(Globals.PATH + "\\data\\itemname.txt");
+                data_systemmsg  = GetData(Globals.PATH + "\\data\\systemmsg.txt");
+                data_hennagrp   = GetData(Globals.PATH + "\\data\\hennagrp.txt");
+                data_npcname    = GetData(Globals.PATH + "\\data\\npcname.txt");
+                data_itemname   = GetData(Globals.PATH + "\\data\\itemname.txt");
                 data_etcitemgrp = GetData(Globals.PATH + "\\data\\etcitemgrp.txt");
-                data_weapongrp = GetData(Globals.PATH + "\\data\\weapongrp.txt");
-                data_armorgrp = GetData(Globals.PATH + "\\data\\armorgrp.txt");
-                data_classes = GetData(Globals.PATH + "\\data\\classes.txt");
-                data_races = GetData(Globals.PATH + "\\data\\races.txt");
-                data_skillname = GetData(Globals.PATH + "\\data\\skillname.txt");
+                data_weapongrp  = GetData(Globals.PATH + "\\data\\weapongrp.txt");
+                data_armorgrp   = GetData(Globals.PATH + "\\data\\armorgrp.txt");
+                data_classes    = GetData(Globals.PATH + "\\data\\classes.txt");
+                data_races      = GetData(Globals.PATH + "\\data\\races.txt");
+                data_skillname  = GetData(Globals.PATH + "\\data\\skillname.txt");
                 data_actionname = GetData(Globals.PATH + "\\data\\actionname.txt");
-                //data_questname = GetData(Globals.PATH + "\\data\\questname.txt");
-                data_zonename = GetData(Globals.PATH + "\\data\\zonename.txt");
-                data_npcstring = GetData(Globals.PATH + "\\data\\npcstring.txt");
+                //data_questname  = GetData(Globals.PATH + "\\data\\questname.txt");
+                data_zonename   = GetData(Globals.PATH + "\\data\\zonename.txt");
+                data_npcstring  = GetData(Globals.PATH + "\\data\\npcstring.txt");
             }
             catch (Exception e)
             {
@@ -71,60 +71,6 @@ namespace L2_login
             LoadGG();
             LoadNPCString();
             Globals.pck_thread.load_filters();
-            /*
-            System.Threading.Tasks.Parallel.For(0, 14, (i) =>
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            LoadSkills();
-                            break;
-                        case 1:
-                            LoadItemName();
-                            break;
-                        case 2:
-                            LoadSystemMsg();
-                            break;
-                        //case 3:
-                            //LoadQuests();
-                            //break;
-                        case 4:
-                            LoadNPCName();
-                            break;
-                        case 5:
-                            LoadActions();
-                            break;
-                        case 6:
-                            LoadHennaGrp();
-                            break;
-                        case 7:
-                            LoadZones();
-                            break;
-                        case 8:
-                            LoadServerName();
-                            break;
-                        case 9:
-                            LoadXP();
-                            break;
-                        case 10:
-                            LoadClasses();
-                            break;
-                        case 11:
-                            LoadRaces();
-                            break;
-                        case 12:
-                            LoadGG();
-                            break;
-                        case 13:
-                            LoadNPCString();
-                            break;
-                        case 3:
-                            Globals.pck_thread.load_filters();
-                            break;
-                    }
-                }
-            );
-            */
 
             data_lvlexp = null;
             data_servername = null;
@@ -323,9 +269,9 @@ namespace L2_login
 
                 //Add_Text("loaded servername", Globals.Red);
             }
-            catch
+            catch (Exception e)
             {
-                Globals.l2net_home.Add_PopUpError("failed to load data\\servername.txt");
+                Globals.l2net_home.Add_PopUpError(e.GetType() + "\n Failed to load data\\servername.txt");
             }
 
             dec = null;

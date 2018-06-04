@@ -30,6 +30,22 @@ Compiling
 * Get [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/) via NuGet Package Manager
 * Open L2 Login.sln with Visual Studio C# 2015
 
+# 2018 Changelog 
+Compiled program is ready to be used in L2Net_June3_2018.7z
+
+commit 8d1944299313199c6b6250c538fa71785a808804
+Author: devmvalvm <devmvalvm@gmail.com>
+Date:   Mon Apr 16 10:37:46 2018 -0700
+
+    Took latest L2Net and reverted it back to H5
+    Fixed a pretty nasty memory leak that affected OOG mode.
+    Put back parsing -o/-options from command line arguments
+        Options file will now be loaded at EnterWorld
+    Created a new global variable for scripting: PARTY_LEADER
+        When loading Party Info, PartyLeader (ID number) is now stored
+        PARTY_LEADER will use this info
+    Various minor fixes, code refactoring and optimization changes.
+
 # Original Changelog
 
 

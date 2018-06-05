@@ -172,11 +172,14 @@ namespace L2_login
                         Globals.pre_useGameServerOveride = true;
                         Globals.pre_checkAdvancedSettings = true;
                         break;
+
+                    case "-upl":
                     case "-useproxylogin":
                         Globals.pre_useProxyServerForLogin = true;
                         Globals.pre_checkAdvancedSettings = true;
                         break;
 
+                    case "-upg":
                     case "-useproxygame":
                         Globals.pre_useProxyServerForGameserver = true;
                         Globals.pre_checkAdvancedSettings = true;
@@ -188,18 +191,27 @@ namespace L2_login
                     case "-gameserverport":
                         Globals.pre_gameserver_override_port = data;
                         break;
+
+                    case "-s5ip":
                     case "-socks5ip":
                         Globals.pre_socks5_ip = data;
                         break;
+
+                    case "-s5po":
                     case "-socks5port":
                         Globals.pre_socks5_port = data;
                         break;
+
+                    case "-s5us":
                     case "-socks5username":
                         Globals.pre_socks5_username = data;
                         break;
+
+                    case "-s5pa":
                     case "-socks5password":
                         Globals.pre_socks5_password = data;
                         break;
+                        
                     case "-ew":
                     case "-enterworld":
                         Globals.pre_EnterWorldCheckbox = true;

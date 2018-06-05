@@ -4780,24 +4780,24 @@ namespace L2_login
 #if DEBUG
             if (Globals.gamedata.my_char.Name.Length != 0)
             {
-                this.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version + Globals.VersionLetter + " - DEBUG";
-                notifyIcon_us.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version + Globals.VersionLetter + " - DEBUG";
+                this.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version + " - " + Globals.VersionLetter + " - DEBUG";
+                notifyIcon_us.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version + " - DEBUG";
             }
             else
             {
-                this.Text = Globals.Name + " rev " + Globals.Version + Globals.VersionLetter + " - DEBUG";
-                notifyIcon_us.Text = Globals.Name + " rev " + Globals.Version + Globals.VersionLetter + " - DEBUG";
+                this.Text = Globals.Name + " rev " + Globals.Version + " - " + Globals.VersionLetter + " - DEBUG";
+                notifyIcon_us.Text = Globals.Name + " rev " + Globals.Version + " - DEBUG";
             }
 #else
                 if (Globals.gamedata.my_char.Name.Length != 0)
                 {
-                    this.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version + Globals.VersionLetter;
-                    notifyIcon_us.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version + Globals.VersionLetter;
+                    this.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version + " - " + Globals.VersionLetter;
+                    notifyIcon_us.Text = Globals.gamedata.my_char.Name + ": " + Globals.Name + " rev " + Globals.Version;
                 }
                 else
                 {
-                    this.Text = Globals.Name + " rev " + Globals.Version + Globals.VersionLetter;
-                    notifyIcon_us.Text = Globals.Name + " rev " + Globals.Version + Globals.VersionLetter;
+                    this.Text = Globals.Name + " rev " + Globals.Version + " - " + Globals.VersionLetter;
+                    notifyIcon_us.Text = Globals.Name + " rev " + Globals.Version;
                 }
 #endif
 

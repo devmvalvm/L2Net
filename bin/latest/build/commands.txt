@@ -131,6 +131,7 @@ double click in inventory to use items
 -x:data IG local listen port
 -y:data IG local listen ip
 -z:# Chronicle to use (7 = CT1)(8 = CT1.5)(9 = CT2.1)(10 = CT2.2)
+-o: -options: load options file
 
 -accept (same as -a)
 -blowfish (same as -b)
@@ -147,14 +148,14 @@ double click in inventory to use items
 The following command line parameters require valid keys to function:
 
 -overidegameserver enables the gameserver overide 
--useproxylogin enables proxy server for login connections 
--useproxygame enables proxy server for game connections 
+-upl -useproxylogin enables proxy server for login connections 
+-upg -useproxygame enables proxy server for game connections 
 -gameserverip ip address of gameserver 
 -gameserverport port of gameserver 
--socks5ip ip address of the socks proxy server 
--socks5port port of the socks proxy server 
--socks5username username for socks proxy 
--socks5password password for socks proxy
+-s5ip -socks5ip ip address of the socks proxy server 
+-s5po -socks5port port of the socks proxy server 
+-s5us -socks5username username for socks proxy 
+-s5pa -socks5password password for socks proxy
 -ewip enable editing ip in enterworld packet
 -ip01: , -ip02: , -ip03: ,ip04:
 -ip11: , -ip12: , -ip13: ,ip14:
